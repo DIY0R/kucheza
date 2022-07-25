@@ -1,15 +1,15 @@
 import { ErrorGenerator } from '../abstracts';
 import { LoginEntity, RegistrationEntity, UserEntity } from '../entities/auth';
-import { AuthRepository } from '../repository/auth/auth.repository';
+import { AuthGateway } from '../gateway/auth/auth.gateway';
 
 export class AuthUseCase {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authGateway: AuthGateway,
     private readonly errorGenerator: ErrorGenerator
   ) {}
 
   private async checkUser(email: string): Promise<UserEntity | null> {
-    const user = await this.authRepository.findByEmail(email);
+    const user = await this.authGateway.findByEmail(email);
     if (!user) return null;
     return user;
   }
@@ -26,7 +26,7 @@ export class AuthUseCase {
   ): Promise<UserEntity | ErrorGenerator> {
     const candidate = await this.checkUser(user.email);
     if (candidate) return this.errorGenerator;
-    const newUser = await this.authRepository.addUser(user);
+    const newUser = await this.authGateway.addUser(user);
     return newUser;
   }
 }
