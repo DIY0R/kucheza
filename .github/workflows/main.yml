@@ -9,6 +9,10 @@ on:
 jobs:   
   TEST:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+        
     environment: TEST
     strategy:
       matrix:
@@ -16,9 +20,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        working-directory: ./server
-      - name: Install
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: "run test"
         run: |
-          npm ci
-          npm run test
+           npm ci
+           npm run test
