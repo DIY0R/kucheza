@@ -1,0 +1,28 @@
+name: client-vanila CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:   
+  TEST:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+        
+    environment: TEST
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: "run test"
+        run: |
+           npm ci
+           npm run test
