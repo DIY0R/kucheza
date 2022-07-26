@@ -6,16 +6,8 @@ on:
   pull_request:
     branches: [main]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    environment: development
-    strategy:
-      matrix:
-        node-version: [16.x]
-        
+jobs:   
   TEST:
-    needs: build
     runs-on: ubuntu-latest
     environment: TEST
     strategy:
@@ -25,9 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+        working-directory: ./server
       - name: Install
         run: |
           npm ci
