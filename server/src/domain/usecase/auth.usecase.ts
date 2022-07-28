@@ -1,10 +1,10 @@
 import { ErrorGenerator } from '../abstracts';
 import { LoginEntity, RegistrationEntity, UserEntity } from '../entities/auth';
-import { AuthGateway } from '../gateway/auth/auth.gateway';
+import { AuthGatewayInterface } from '../gateway/auth/auth.gateway';
 
 export class AuthUseCase {
   constructor(
-    private readonly authGateway: AuthGateway,
+    private readonly authGateway: AuthGatewayInterface,
     private readonly errorGenerator: ErrorGenerator
   ) {}
 
