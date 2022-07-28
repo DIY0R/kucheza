@@ -7,13 +7,13 @@ on:
     branches: [main]
 
 jobs:   
-  TEST:
+  TESTS:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./server
         
-    environment: TEST
+    environment: TESTS
     strategy:
       matrix:
         node-version: [16.x]
