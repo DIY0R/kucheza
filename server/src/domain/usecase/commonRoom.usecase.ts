@@ -7,13 +7,14 @@ export class commonRoomUseCase<S> {
     private commonRoomGeteway: CommonRoomGetewayInterface
   ) {}
 
-  generalSendAndSave(data: string, id: number) {
+  public generalSendAndSave(data: string, id: number) {
     this.commonRoomGeteway.push(data.toString(), id);
     Object.values(this.socketStorage).forEach((socket) => {
       socket.write(data);
     });
   }
-  ReceiveCommonRoomGeteway(): CommonRoomGetewayInterface {
+
+  public receiveCommonRoomGeteway(): CommonRoomGetewayInterface {
     return this.commonRoomGeteway;
   }
 }
