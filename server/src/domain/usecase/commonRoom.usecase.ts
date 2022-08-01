@@ -13,6 +13,9 @@ export class commonRoomUseCase<S> {
       socket.write(data);
     });
   }
+  public sendOne(data: string, id: number) {
+    this.socketStorage[id].write(data);
+  }
 
   public receiveCommonRoomGeteway(): CommonRoomGetewayInterface {
     return this.commonRoomGeteway;
