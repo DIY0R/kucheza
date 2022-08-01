@@ -1,4 +1,5 @@
 const net = require('net');
+const { Buffer } = require('buffer');
 
 const socket = new net.Socket();
 
@@ -13,7 +14,11 @@ socket.connect(
   },
   () => {
     console.log('\x1b[46m%s\x1b[0m', 'LOG', 'Сlient connect to server 🔛');
-    socket.write(Math.random().toString());
+
+    socket.write(
+      JSON.stringify({ summon: 'all', messagae: 'hello server from client' }),
+      'utf8'
+    );
   }
 );
 
