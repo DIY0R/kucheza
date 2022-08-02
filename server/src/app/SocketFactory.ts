@@ -23,7 +23,6 @@ function forwardSocket(data: Buffer, id: number) {
 export function SocketFactory(socket: net.Socket) {
   const id = Math.floor(Math.random() * 1000);
   socket.setNoDelay(true);
-  const sk = socket.setKeepAlive(true);
   objSockets[id] = socket;
 
   socket.write(

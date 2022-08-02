@@ -1,9 +1,7 @@
 import { commonRoomUseCase } from '../../domain/usecase/commonRoom.usecase';
 import net from 'net';
-export interface DataReceivedInterface {
-  [key: string]: any;
-}
-export class DataReceived implements DataReceivedInterface {
+
+export class DataReceived {
   constructor(
     private readonly CommonRoomUseCase: commonRoomUseCase<net.Socket>
   ) {}
