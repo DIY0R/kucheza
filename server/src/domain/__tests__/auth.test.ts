@@ -17,7 +17,7 @@ describe('AccountEntity', () => {
     expect(user).toEqual({
       name: 'Kola',
       email: 'kola@hi.com',
-      password: '123',
+      password: '1234',
     });
   });
 });
