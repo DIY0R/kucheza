@@ -11,7 +11,10 @@ describe('AccountEntity', () => {
   const auth = new AuthUseCase({ addUser } as any, errorGenerator);
 
   const checkUser = jest.spyOn(auth as any, 'checkUser');
-  afterEach(() => checkUser.mockClear());
+  afterEach(() => {
+    checkUser.mockClear();
+    addUser.mockClear();
+  });
 
   test('entered correctly login', async () => {
     checkUser.mockReturnValue({
@@ -53,5 +56,20 @@ describe('AccountEntity', () => {
     expect((auth as any).checkUser).toBeCalledTimes(1);
     expect(addUser).toBeCalledTimes(1);
     expect(user).toEqual({ name: 'Kola', email: 'kola@hi.com' });
+  });
+
+  test('were maintained by existing data', async () => {
+    checkUser.mockReturnValue({
+      name: 'Kola',
+      email: 'kola@hi.com',
+    });
+
+    const user = await auth.registration({
+      name: 'Kola',
+      email: 'kola@hi.com',
+    } as any);
+    expect((auth as any).checkUser).toBeCalledTimes(1);
+    expect(addUser).toBeCalledTimes(0);
+    expect(user).toEqual(errorGenerator);
   });
 });
