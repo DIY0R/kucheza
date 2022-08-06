@@ -2,7 +2,9 @@ import { commonRoomUseCase } from '../usecase/commonRoom.usecase';
 
 describe('commonRoom', () => {
   const write = jest.fn((data: string) => true || false);
-  const socketStorage = { 5: { write } };
+  const socketStorage: { [key: string]: { write: Function } } = {
+    5: { write },
+  };
   const commonRoomGeteway = {
     push: jest.fn((data: string, id: number) => {}),
   };
@@ -10,10 +12,18 @@ describe('commonRoom', () => {
     socketStorage as any,
     commonRoomGeteway as any
   );
+  const args: [string, number] = ['hello', 5];
+  afterEach(() => {
+    write.mockClear();
+  });
   test('check the algorithm for sending messages to all', () => {
-    const args: [string, number] = ['hello', 5];
     CommonRoomUseCase.generalSendAndSave(...args);
     expect(commonRoomGeteway.push).toHaveBeenCalledWith(...args);
     expect(write).toBeCalledTimes(Object.keys(socketStorage).length);
+  });
+
+  test('check the sending algorithm to one person', () => {
+    CommonRoomUseCase.sendOne(...args);
+    expect(socketStorage[args[1]].write).toBeCalledTimes(1);
   });
 });
