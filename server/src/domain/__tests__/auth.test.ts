@@ -1,10 +1,13 @@
 import { ErrorGenerator } from '../abstracts';
+
 import { UserEntity } from '../entities/auth';
 import { AuthGatewayInterface } from '../gateway/auth/auth.gateway';
+
 import { AuthUseCase } from '../usecase/auth.usecase';
 
 describe('AccountEntity', () => {
   const errorGenerator: ErrorGenerator = { message: 'Erorr', status: 403 };
+
   const addUser = jest
     .fn()
     .mockReturnValue({ name: 'Kola', email: 'kola@hi.com' });
@@ -15,6 +18,7 @@ describe('AccountEntity', () => {
     checkUser.mockClear();
     addUser.mockClear();
   });
+
 
   test('entered correctly login', async () => {
     checkUser.mockReturnValue({
@@ -46,7 +50,7 @@ describe('AccountEntity', () => {
     expect(user).toEqual(errorGenerator);
   });
 
-  test('the correct data has been saved during the registration process', async () => {
+ test('the correct data has been saved during the registration process', async () => {
     checkUser.mockReturnValue(null);
 
     const user = await auth.registration({
@@ -72,4 +76,5 @@ describe('AccountEntity', () => {
     expect(addUser).toBeCalledTimes(0);
     expect(user).toEqual(errorGenerator);
   });
+
 });
