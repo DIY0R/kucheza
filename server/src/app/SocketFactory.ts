@@ -1,13 +1,11 @@
 import net from 'net';
 import { CommonRoomGeteway } from '../data/CommonRoomGeteway';
-import { SocketStorage } from '../domain/abstracts';
+
 import { commonRoomUseCase } from '../domain/usecase/commonRoom.usecase';
 import { checkValid } from './checkOnValid/check';
 import { DataReceived } from './ResponseReceived/DataReceived';
-import { ResponseClient } from './ResponseReceived/ResponseClient';
-
-const objSockets: SocketStorage<net.Socket> = {};
-
+import { SocketsStore } from '../data/SocketsStore';
+const objSockets = new SocketsStore();
 const CommonRoomUseCase = new commonRoomUseCase<net.Socket>(
   objSockets,
   new CommonRoomGeteway()
@@ -23,7 +21,7 @@ function forwardSocket(data: Buffer, id: number) {
 export function SocketFactory(socket: net.Socket) {
   const id = Math.floor(Math.random() * 1000);
   socket.setNoDelay(true);
-  objSockets[id] = socket;
+  objSockets.addSocket(id, socket);
 
   socket.write(
     JSON.stringify(CommonRoomUseCase.receiveCommonRoomGeteway().getAll())
@@ -31,11 +29,11 @@ export function SocketFactory(socket: net.Socket) {
 
   socket.on('data', (data) => checkValid(forwardSocket, data, id));
   socket.on('end', () => {
-    delete objSockets[id];
+    objSockets.deleteSocket(id);
     console.log(id, ' exist');
   });
   socket.on('error', (error) => {
-    delete objSockets[id];
+    objSockets.deleteSocket(id);
     console.log('\x1b[41m%s\x1b[0m', 'ERROR', { id, ...error });
   });
 }
