@@ -1,20 +1,18 @@
-import { SocketStorage } from '../abstracts';
 import { CommonRoomGetewayInterface } from '../gateway/room/commonRoom.geteway';
+import { SocketStorage } from '../gateway/room/socketStorage';
 
 export class commonRoomUseCase<S> {
   constructor(
-    private socketStorage: SocketStorage<S & { write(daat: string): boolean }>,
+    private socketStorage: SocketStorage,
     private commonRoomGeteway: CommonRoomGetewayInterface
   ) {}
 
   public generalSendAndSave(data: string, id: number) {
     this.commonRoomGeteway.push(data.toString(), id);
-    Object.values(this.socketStorage).forEach((socket) => {
-      socket.write(data);
-    });
+    this.socketStorage.writeAll(data);
   }
   public sendOne(data: string, id: number) {
-    this.socketStorage[id].write(data);
+    this.socketStorage.write(id, data);
   }
 
   public receiveCommonRoomGeteway(): CommonRoomGetewayInterface {

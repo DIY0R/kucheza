@@ -49,7 +49,3 @@ socket.on('error', (error) =>
 );
 
 process.on('SIGINT', () => socket.end(() => process.exit(1)));
-
-for (let i = 0; i < 10000; i++) {
-  console.log('');
-}
