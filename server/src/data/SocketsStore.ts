@@ -10,14 +10,13 @@ export class SocketsStore implements SocketStorage {
   public deleteSocket(id: number) {
     this.sockets.delete(id);
   }
+
   public writeAll(data: string) {
     Object.values(this.sockets).forEach((socket) => {
       socket.write(data);
     });
   }
-  write(id: number, data: string): void {
+  public write(id: number, data: string): void {
     this.sockets.get(id)?.write(data);
   }
-
-  //   public get sockets
 }
