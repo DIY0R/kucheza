@@ -48,4 +48,5 @@ socket.on('error', (error) =>
   console.log('\x1b[41m%s\x1b[0m', 'ERROR', { ...error })
 );
 
-process.on('SIGINT', () => socket.end(() => process.exit(1)));
+process.on('SIGINT', () => socket.end(() => process.exit(0)));
+
