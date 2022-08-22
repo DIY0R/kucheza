@@ -3,29 +3,37 @@ const readline = require('readline');
 const { stdin: input, stdout: output } = require('process');
 const rl = readline.createInterface({ input, output });
 const questions = require('./question.js');
+const AllocateResponses = require('./responses.js');
+
 const socket = new net.Socket();
 
 const createQuestion = (theQuestion) => {
   return new Promise((resolve, reject) => {
     try {
-      rl.question(theQuestion + ': ', (theAnswer) => resolve(theAnswer));
+      rl.question(theQuestion, (theAnswer) => resolve(theAnswer));
     } catch (err) {
-      reject(err);
+      rl.close();
     }
   });
 };
-const startQuestions = (async () => {
+const startQuestions = async (connecttoServer) => {
+  const answers = [];
   for (let [
     _,
     { question: questionText, fn: responseFunction },
   ] of Object.entries(questions)) {
     const answer = await createQuestion(questionText);
     responseFunction(answer);
+    answers.push(answer);
   }
-  rl.close();
-})();
+  // rl.close();
+  rl.on('line', (input) => {
+    // console.dir(socket);
+  });
+  connecttoServer(answers);
+};
 
-const connecttoServer = () => {
+const connecttoServer = (answers) => {
   socket.connect(
     {
       port: 2000,
@@ -34,19 +42,19 @@ const connecttoServer = () => {
     () => {
       console.log('\x1b[46m%s\x1b[0m', 'LOG', 'Сlient connect to server 🔛');
       socket.write(
-        JSON.stringify({ summon: 'all', messagae: 'hello server from client' }),
+        JSON.stringify({
+          summon: 'connect',
+          info: answers,
+        }),
         'utf8'
       );
     }
   );
 };
-rl.on('close', connecttoServer);
-socket.on('data', (data) => {
-  console.log('server->' + data.toString().split(','));
-});
+startQuestions(connecttoServer);
+socket.on('data', AllocateResponses);
 socket.on('error', (error) =>
   console.log('\x1b[41m%s\x1b[0m', 'ERROR', { ...error })
 );
 
 process.on('SIGINT', () => socket.end(() => process.exit(0)));
-
