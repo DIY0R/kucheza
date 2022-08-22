@@ -24,7 +24,11 @@ export function SocketFactory(socket: net.Socket) {
   objSockets.addSocket(id, socket);
 
   socket.write(
-    JSON.stringify(CommonRoomUseCase.receiveCommonRoomGeteway().getAll())
+    JSON.stringify({
+      summon: 'info',
+      id,
+      chat: CommonRoomUseCase.receiveCommonRoomGeteway().getAll(),
+    })
   );
 
   socket.on('data', (data) => checkValid(forwardSocket, data, id));
