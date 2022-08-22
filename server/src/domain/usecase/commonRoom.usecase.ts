@@ -1,3 +1,4 @@
+import { SendOne } from '../entities/room/sendOne';
 import { CommonRoomGetewayInterface } from '../gateway/room/commonRoom.geteway';
 import { SocketStorage } from '../gateway/room/socketStorage';
 
@@ -9,10 +10,18 @@ export class commonRoomUseCase<S> {
 
   public generalSendAndSave(data: string, id: number) {
     this.commonRoomGeteway.push(data.toString(), id);
-    this.socketStorage.writeAll(data);
+    this.socketStorage.writeAll(JSON.stringify({ summon: 'all', id, data }));
   }
-  public sendOne(data: string, id: number) {
-    this.socketStorage.write(id, data);
+  public generalSendConecttion(info: Array<string>, id: number) {
+    const [name, age] = info;
+    this.socketStorage.writeAll(
+      JSON.stringify({ summon: 'info', id, name, age })
+    );
+  }
+  public sendOne(sendOne: SendOne) {
+    const { id, data, senderName } = sendOne;
+    const sendOneParse = JSON.stringify({ summon: 'one', data, senderName });
+    this.socketStorage.write(sendOneParse, id);
   }
 
   public receiveCommonRoomGeteway(): CommonRoomGetewayInterface {
