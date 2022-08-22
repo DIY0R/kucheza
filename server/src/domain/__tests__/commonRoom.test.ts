@@ -1,13 +1,12 @@
+import { SendOne } from '../entities/room/sendOne';
 import { commonRoomUseCase } from '../usecase/commonRoom.usecase';
 
 describe('commonRoom', () => {
-
   const writeAll = jest.fn((data: string) => true || false);
   const write = jest.fn((data: string) => true || false);
   const socketStorage = {
     write,
     writeAll,
-
   };
   const commonRoomGeteway = {
     push: jest.fn((data: string, id: number) => {}),
@@ -20,16 +19,16 @@ describe('commonRoom', () => {
   afterEach(() => {
     write.mockClear();
     writeAll.mockClear();
-
   });
   test('check the algorithm for sending messages to all', () => {
     CommonRoomUseCase.generalSendAndSave(...args);
     expect(commonRoomGeteway.push).toHaveBeenCalledWith(...args);
-     expect(writeAll).toBeCalledTimes(1);
-    });
+    expect(writeAll).toBeCalledTimes(1);
+  });
 
   test('check the sending algorithm to one person', () => {
-    CommonRoomUseCase.sendOne(...args);
+    const sendObj: SendOne = { data: 'hi', id: 5, senderName: 'Bingo' };
+    CommonRoomUseCase.sendOne(sendObj);
     expect(write).toBeCalledTimes(1);
   });
 });

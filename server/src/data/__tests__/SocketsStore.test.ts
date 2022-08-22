@@ -28,7 +28,7 @@ describe('check Sockets Store', () => {
   });
 
   test('for write socket', () => {
-    socketsStore.write(id, 'hello world !');
+    socketsStore.write('hello world !', id);
 
     expect(socketsStore.sockets.get(id).write).toBeCalledTimes(1);
   });
