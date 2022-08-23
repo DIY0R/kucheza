@@ -1,4 +1,4 @@
-name: client-vanila CI
+name:  CI
 
 on:
   push:
