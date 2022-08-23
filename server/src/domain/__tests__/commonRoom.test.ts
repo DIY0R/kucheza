@@ -31,4 +31,9 @@ describe('commonRoom', () => {
     CommonRoomUseCase.sendOne(sendObj);
     expect(write).toBeCalledTimes(1);
   });
+  test('check the algorithm for sending conecttion info', () => {
+    const inf = ['Bingo', '24'];
+    CommonRoomUseCase.generalSendConecttion(inf, 5);
+    expect(writeAll).toBeCalledTimes(1);
+  });
 });
