@@ -17,6 +17,7 @@ export class DataReceived {
     });
   }
   connect(res: { info: Array<string> }, id: number) {
+    console.log(id, res);
     this.CommonRoomUseCase.generalSendConecttion(res.info, id);
   }
 }

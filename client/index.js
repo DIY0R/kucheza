@@ -28,8 +28,21 @@ const startQuestions = async (connecttoServer) => {
   }
   // rl.close();
   rl.on('line', (input) => {
-    // console.dir(socket);
+    const inputCommand = input.split(' ');
+    const command = inputCommand[0];
+
+    if (command.split('')[0] !== '/')
+      return console.log('\x1b[41m%s\x1b[0m', 'ERROR', `can't recognize`);
+
+    const sender = inputCommand.filter((_, i) => i !== 0);
+
+    const obj = sender.reduce((obj, currentInfo) => {
+      const sortInfo = currentInfo.split('=');
+      return { ...obj, [sortInfo[0]]: sortInfo[1] };
+    }, {});
+    console.log(command, sender, obj);
   });
+
   connecttoServer(answers);
 };
 
@@ -58,3 +71,4 @@ socket.on('error', (error) =>
 );
 
 process.on('SIGINT', () => socket.end(() => process.exit(0)));
+rl.on('close', () => socket.end(() => process.exit(0)));

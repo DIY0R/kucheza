@@ -14,7 +14,7 @@ const dataReceived = new DataReceived(CommonRoomUseCase);
 
 function forwardSocket(data: Buffer, id: number) {
   const clientData = JSON.parse(data.toString());
-
+  
   dataReceived[clientData.summon as keyof typeof dataReceived](clientData, id);
 }
 
