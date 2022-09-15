@@ -34,13 +34,23 @@ const startQuestions = async (connecttoServer) => {
     if (command.split('')[0] !== '/')
       return console.log('\x1b[41m%s\x1b[0m', 'ERROR', `can't recognize`);
 
-    const sender = inputCommand.filter((_, i) => i !== 0);
+    const recive = inputCommand.filter((_, i) => i !== 0);
 
-    const obj = sender.reduce((obj, currentInfo) => {
+    const sender = recive.reduce((command, currentInfo) => {
       const sortInfo = currentInfo.split('=');
-      return { ...obj, [sortInfo[0]]: sortInfo[1] };
+      return { ...command, [sortInfo[0]]: sortInfo[1] };
     }, {});
-    console.log(command, sender, obj);
+    console.log(command.substring(1), sender);
+
+    socket.write(
+      JSON.stringify({
+        summon: command.substring(1),
+        id: 1,
+        message: 'hello',
+        name: answers[0],
+      }),
+      'utf8'
+    );
   });
 
   connecttoServer(answers);
