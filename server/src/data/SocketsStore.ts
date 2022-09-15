@@ -17,4 +17,7 @@ export class SocketsStore implements SocketStorage {
   public write(sendOne: string, id: number): void {
     this.sockets.get(id)?.write(sendOne);
   }
+  public checkId = (id: number) => {
+    return this.sockets.has(id);
+  };
 }

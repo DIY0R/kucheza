@@ -4,6 +4,7 @@ import commonRoomUseCase from '../domain/usecase/commonRoom.usecase';
 import { checkValid } from './checkOnValid/check';
 import DataReceived from './ResponseReceived/DataReceived';
 import { SocketsStore } from '../data/SocketsStore';
+import { randomId } from './utils/random';
 
 const objSockets = new SocketsStore();
 const CommonRoomUseCase = new commonRoomUseCase<net.Socket>(
@@ -18,7 +19,8 @@ function forwardSocket(data: Buffer, id: number) {
 }
 
 export function SocketFactory(socket: net.Socket) {
-  const id = Math.floor(Math.random() * 1000);
+  const id = randomId(objSockets.checkId);
+
   socket.setNoDelay(true);
   objSockets.addSocket(id, socket);
 
