@@ -1,5 +1,5 @@
 import { SendOne } from '../entities/room/sendOne';
-import { commonRoomUseCase } from '../usecase/commonRoom.usecase';
+import commonRoomUseCase from '../usecase/commonRoom.usecase';
 
 describe('commonRoom', () => {
   const writeAll = jest.fn((data: string) => true || false);

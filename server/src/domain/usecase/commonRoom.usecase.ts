@@ -2,7 +2,7 @@ import { SendOne } from '../entities/room/sendOne';
 import { CommonRoomGetewayInterface } from '../gateway/room/commonRoom.geteway';
 import { SocketStorage } from '../gateway/room/socketStorage';
 
-export class commonRoomUseCase<S> {
+export default class commonRoomUseCase<S> {
   constructor(
     private socketStorage: SocketStorage,
     private commonRoomGeteway: CommonRoomGetewayInterface

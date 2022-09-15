@@ -19,7 +19,6 @@ describe('AccountEntity', () => {
     addUser.mockClear();
   });
 
-
   test('entered correctly login', async () => {
     checkUser.mockReturnValue({
       name: 'Kola',
@@ -50,7 +49,7 @@ describe('AccountEntity', () => {
     expect(user).toEqual(errorGenerator);
   });
 
- test('the correct data has been saved during the registration process', async () => {
+  test('the correct data has been saved during the registration process', async () => {
     checkUser.mockReturnValue(null);
 
     const user = await auth.registration({
@@ -76,5 +75,4 @@ describe('AccountEntity', () => {
     expect(addUser).toBeCalledTimes(0);
     expect(user).toEqual(errorGenerator);
   });
-
 });

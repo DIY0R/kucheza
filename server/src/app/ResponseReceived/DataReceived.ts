@@ -1,7 +1,7 @@
-import { commonRoomUseCase } from '../../domain/usecase/commonRoom.usecase';
+import commonRoomUseCase from '../../domain/usecase/commonRoom.usecase';
 import net from 'net';
 
-export class DataReceived {
+export default class DataReceived {
   constructor(
     private readonly CommonRoomUseCase: commonRoomUseCase<net.Socket>
   ) {}
@@ -17,7 +17,6 @@ export class DataReceived {
     });
   }
   connect(res: { info: Array<string> }, id: number) {
-    console.log(id, res);
     this.CommonRoomUseCase.generalSendConecttion(res.info, id);
   }
 }

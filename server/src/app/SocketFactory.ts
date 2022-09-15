@@ -1,10 +1,10 @@
 import net from 'net';
 import { CommonRoomGeteway } from '../data/CommonRoomGeteway';
-
-import { commonRoomUseCase } from '../domain/usecase/commonRoom.usecase';
+import commonRoomUseCase from '../domain/usecase/commonRoom.usecase';
 import { checkValid } from './checkOnValid/check';
-import { DataReceived } from './ResponseReceived/DataReceived';
+import DataReceived from './ResponseReceived/DataReceived';
 import { SocketsStore } from '../data/SocketsStore';
+
 const objSockets = new SocketsStore();
 const CommonRoomUseCase = new commonRoomUseCase<net.Socket>(
   objSockets,
@@ -14,7 +14,6 @@ const dataReceived = new DataReceived(CommonRoomUseCase);
 
 function forwardSocket(data: Buffer, id: number) {
   const clientData = JSON.parse(data.toString());
-  
   dataReceived[clientData.summon as keyof typeof dataReceived](clientData, id);
 }
 
