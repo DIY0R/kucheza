@@ -5,4 +5,5 @@ export interface SocketStorage {
   deleteSocket(od: number): void;
   write(sendOne: string, id: number): void;
   writeAll(data: string): void;
+  checkId(id: number): boolean;
 }

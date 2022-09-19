@@ -14,8 +14,15 @@ const CommonRoomUseCase = new commonRoomUseCase<net.Socket>(
 const dataReceived = new DataReceived(CommonRoomUseCase);
 
 function forwardSocket(data: Buffer, id: number) {
-  const clientData = JSON.parse(data.toString());
-  dataReceived[clientData.summon as keyof typeof dataReceived](clientData, id);
+  try {
+    const clientData = JSON.parse(data.toString());
+    dataReceived[clientData.summon as keyof typeof dataReceived](
+      clientData,
+      id
+    );
+  } catch (error) {
+    console.log('error');
+  }
 }
 
 export function SocketFactory(socket: net.Socket) {

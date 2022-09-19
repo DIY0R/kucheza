@@ -15,9 +15,12 @@ export class SocketsStore implements SocketStorage {
     this.sockets.forEach((socket) => socket.write(data));
   }
   public write(sendOne: string, id: number): void {
-    this.sockets.get(id)?.write(sendOne);
+    // console.log('------>', this.sockets.get(+id));
+    this.sockets.get(+id)?.write(sendOne);
   }
   public checkId = (id: number) => {
     return this.sockets.has(id);
   };
 }
+
+//one id=71 message=ddddd name=HEJi
