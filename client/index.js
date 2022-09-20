@@ -26,11 +26,10 @@ const startQuestions = async (connecttoServer) => {
     responseFunction(answer);
     answers.push(answer);
   }
-  // rl.close();
+
   rl.on('line', (input) => {
     const inputCommand = input.split(' ');
     const command = inputCommand[0];
-
     if (command.split('')[0] !== '/')
       return console.log('\x1b[41m%s\x1b[0m', 'ERROR', `can't recognize`);
 
@@ -40,14 +39,11 @@ const startQuestions = async (connecttoServer) => {
       const sortInfo = currentInfo.split('=');
       return { ...command, [sortInfo[0]]: sortInfo[1] };
     }, {});
-    console.log(command.substring(1), sender);
 
     socket.write(
       JSON.stringify({
         summon: command.substring(1),
-        id: 1,
-        message: 'hello',
-        name: answers[0],
+        ...sender,
       }),
       'utf8'
     );
@@ -57,22 +53,16 @@ const startQuestions = async (connecttoServer) => {
 };
 
 const connecttoServer = (answers) => {
-  socket.connect(
-    {
-      port: 2000,
-      host: 'localhost',
-    },
-    () => {
-      console.log('\x1b[46m%s\x1b[0m', 'LOG', 'Сlient connect to server 🔛');
-      socket.write(
-        JSON.stringify({
-          summon: 'connect',
-          info: answers,
-        }),
-        'utf8'
-      );
-    }
-  );
+  socket.connect({ port: 2000, host: 'localhost' }, () => {
+    console.log('\x1b[46m%s\x1b[0m', 'LOG', 'Сlient connect to server 🔛');
+    socket.write(
+      JSON.stringify({
+        summon: 'connect',
+        info: answers,
+      }),
+      'utf8'
+    );
+  });
 };
 startQuestions(connecttoServer);
 socket.on('data', AllocateResponses);
