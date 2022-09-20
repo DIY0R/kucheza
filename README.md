@@ -6,5 +6,3 @@
 * used in the  /server clean architecture
 
 <br/><br/>
-
-> 🔴 __STATUS__: developing  
