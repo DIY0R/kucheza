@@ -54,7 +54,7 @@ const startQuestions = async (connecttoServer) => {
 
 const connecttoServer = (answers) => {
   socket.connect({ port: 2000, host: 'localhost' }, () => {
-    console.log('\x1b[46m%s\x1b[0m', 'LOG', 'Сlient connect to server 🔛');
+    console.log('\x1b[46m%s\x1b[0m', 'LOG', 'Connecting to server 🔛');
     socket.write(
       JSON.stringify({
         summon: 'connect',
