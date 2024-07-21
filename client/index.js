@@ -1,10 +1,10 @@
 const net = require('net');
 const readline = require('readline');
 const { stdin: input, stdout: output } = require('process');
-const rl = readline.createInterface({ input, output });
 const questions = require('./question.js');
 const AllocateResponses = require('./responses.js');
 
+const rl = readline.createInterface({ input, output });
 const socket = new net.Socket();
 
 const createQuestion = (theQuestion) => {
@@ -16,12 +16,11 @@ const createQuestion = (theQuestion) => {
     }
   });
 };
-const startQuestions = async (connecttoServer) => {
+
+const startQuestions = async (connectToServer) => {
   const answers = [];
-  for (let [
-    _,
-    { question: questionText, fn: responseFunction },
-  ] of Object.entries(questions)) {
+  
+  for (let { question: questionText, fn: responseFunction } of Object.values(questions)) {
     const answer = await createQuestion(questionText);
     responseFunction(answer);
     answers.push(answer);
@@ -30,14 +29,16 @@ const startQuestions = async (connecttoServer) => {
   rl.on('line', (input) => {
     const inputCommand = input.split(' ');
     const command = inputCommand[0];
-    if (command.split('')[0] !== '/')
-      return console.log('\x1b[41m%s\x1b[0m', 'ERROR', `can't recognize`);
+    
+    if (command[0] !== '/') {
+      return console.log('\x1b[41m%s\x1b[0m', 'ERROR', "can't recognize");
+    }
 
-    const recive = inputCommand.filter((_, i) => i !== 0);
+    const recive = inputCommand.slice(1);
 
     const sender = recive.reduce((command, currentInfo) => {
-      const sortInfo = currentInfo.split('=');
-      return { ...command, [sortInfo[0]]: sortInfo[1] };
+      const [key, value] = currentInfo.split('=');
+      return { ...command, [key]: value };
     }, {});
 
     socket.write(
@@ -49,10 +50,10 @@ const startQuestions = async (connecttoServer) => {
     );
   });
 
-  connecttoServer(answers);
+  connectToServer(answers);
 };
 
-const connecttoServer = (answers) => {
+const connectToServer = (answers) => {
   socket.connect({ port: 2000, host: 'localhost' }, () => {
     console.log('\x1b[46m%s\x1b[0m', 'LOG', 'Connecting to server 🔛');
     socket.write(
@@ -64,11 +65,10 @@ const connecttoServer = (answers) => {
     );
   });
 };
-startQuestions(connecttoServer);
-socket.on('data', AllocateResponses);
-socket.on('error', (error) =>
-  console.log('\x1b[41m%s\x1b[0m', 'ERROR', { ...error })
-);
 
+startQuestions(connectToServer);
+
+socket.on('data', AllocateResponses);
+socket.on('error', (error) =>console.log('\x1b[41m%s\x1b[0m', 'ERROR', { ...error }));
 process.on('SIGINT', () => socket.end(() => process.exit(0)));
 rl.on('close', () => socket.end(() => process.exit(0)));
